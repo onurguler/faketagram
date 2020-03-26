@@ -1,0 +1,14 @@
+{
+    "python.pythonPath": "venv/bin/python3.7",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": [
+        "--disable=C0111",
+        "--load-plugins",
+        "pylint_django"
+    ],
+    "python.formatting.autopep8Path": "autopep8",
+    "[python]": {
+        "editor.formatOnSave": true
+    },
+}
