@@ -5,12 +5,17 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class SignUpForm(UserCreationForm):
+    first_name = forms.CharField(
+        max_length=100, help_text='Please tell us your first name (Optional).')
+    last_name = forms.CharField(
+        max_length=100, help_text='Please tell us your last name (Optional).')
     email = forms.EmailField(
-        required=True, max_length=200, label='Email Address')
+        required=True, max_length=200, label='Email Address', help_text='Required. Please provide a email address.')
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'username',
+                  'email', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -21,7 +26,11 @@ class SignUpForm(UserCreationForm):
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
-            # self.add_error('email', 'A user with that email already exists.')
             raise forms.ValidationError(
                 'A user with that email already exists.')
         return self.cleaned_data['email']
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=255, required=True)
+    password = forms.CharField(widget=forms.PasswordInput(), required=True)
