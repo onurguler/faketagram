@@ -3,6 +3,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
+<a href="{% url 'accounts:search' %}">Search</a>
 <h1>Welcome <a href="{% url 'accounts:profile' username=user.username %}">{{ user.username }}</a></h1>
 <a href="{% url 'accounts:logout' %}">Logout</a>
 {% endif %}

@@ -5,9 +5,9 @@
         @{{ profile }} 
         {% if can_follow %}
             {% if followed %}
-                <a href="#">Unfollow</a>
+                <a href="{% url 'accounts:unfollow' username=profile.user.username %}">Unfollow</a>
             {% else %}
-                <a href="{% url 'accounts:follow' username=profile %}">Follow</a>
+                <a href="{% url 'accounts:follow' username=profile.user.username %}">Follow</a>
             {% endif %}
         {% endif %}
     </h2>
@@ -22,6 +22,6 @@
     {% if profile.bio %}
         <p>{{ profile.bio }}</p>
     {% endif %}
-    <a href="{% url 'accounts:followers' username=profile %}">Followers: {{ profile.followers }}</a>
-    <a href="{% url 'accounts:followings' username=profile %}">Followings: {{ profile.followings }}</a>
+    <a href="{% url 'accounts:followers' username=profile.user.username %}">Followers: {{ profile.followers }}</a>
+    <a href="{% url 'accounts:followings' username=profile.user.username %}">Followings: {{ profile.followings }}</a>
 {% endblock content %}

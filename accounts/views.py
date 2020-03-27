@@ -146,3 +146,15 @@ def followings_list_view(request, username):
                'user_followings': user_followings}
 
     return render(request, 'accounts/followings_list.html', context)
+
+
+def search_accounts_view(request):
+    if request.POST:
+        # TODO: dynamic search accounts
+        pass
+
+    accounts = User.objects.all()
+
+    context = {'accounts': accounts}
+
+    return render(request, 'accounts/search.html', context)

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post">
+        <input type="text" name="search" placeholder="Search by username">
+        <input type="submit" value="Search">
+    </form>
+    <div>
+        {% for account in accounts %}
+            <div>
+                <div>
+                    <a href="{% url 'accounts:profile' username=account.username %}">@{{ account.username }}</a>
+                </div>
+                <div>
+                    {% if account.first_name or account.last_name %}
+                        <a href="{% url 'accounts:profile' username=account.username %}">
+                            {% if account.first_name %}
+                                {{ account.first_name }}
+                            {% endif %}
+                            {% if account.last_name %}
+                                {{ account.last_name }}
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+{% endblock content %}
