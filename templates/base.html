@@ -8,8 +8,11 @@
     <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
     <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
 </head>
-<body>
-<i class="fas fa-trash"></i>
+<body class="antialiased bg-gray-100 text-gray-900">
+    {% block header %}
+        {% include 'partials/_navbar.html' %}
+    {% endblock header %}
+
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
