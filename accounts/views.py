@@ -8,7 +8,7 @@ from django.contrib import messages
 from accounts.forms import SignUpForm, LoginForm
 
 from django.contrib.auth.models import User
-from accounts.models import Profile
+from accounts.models import Profile, UserFollow
 
 
 def signup_view(request):
@@ -72,5 +72,77 @@ def logout_view(request):
 
 def profile_view(request, username):
     user = get_object_or_404(User, username=username)
+
     context = {'profile': user.profile}
+
+    context['can_follow'] = True if username != request.user.username else False
+    if request.user.is_authenticated and context['can_follow']:
+        result = user.followers.filter(
+            follower__username=request.user.username)
+        context['followed'] = True if result else False
+
     return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+def follow_view(request, username):
+    followable = get_object_or_404(User, username=username)
+
+    if followable != request.user:
+        _, created = UserFollow.objects.get_or_create(
+            follower=request.user, followable=followable)
+
+        if created:
+            messages.success(
+                request, f'You have successfully followed {followable.username}.')
+        else:
+            messages.warning(
+                request, f'You have already followed {followable.username}.')
+    else:
+        messages.warning(request, 'You cannot follow yourself.')
+
+    return redirect('accounts:profile', username=followable.username)
+
+
+@login_required
+def unfollow_view(request, username):
+    followable = get_object_or_404(User, username=username)
+
+    if followable != request.user:
+        follow = get_object_or_404(
+            UserFollow, follower=request.user, followable=followable)
+        follow.delete()
+        messages.success(
+            request, f'You have just unfollowed {followable.username}')
+    else:
+        messages.warning(request, 'You cannot unfollow yourself.')
+
+    return redirect('accounts:profile', username=followable.username)
+
+
+def followers_list_view(request, username):
+    user = get_object_or_404(User, username=username)
+    user_followings = None
+
+    if user.is_authenticated:
+        user_followings = request.user.profile.get_followings()
+
+    context = {'follows': user.followers.all(),
+               'mode': 'Followers',
+               'user_followings': user_followings}
+
+    return render(request, 'accounts/followers_list.html', context)
+
+
+def followings_list_view(request, username):
+    user = get_object_or_404(User, username=username)
+    user_followings = None
+
+    if user.is_authenticated:
+        user_followings = request.user.profile.get_followings()
+
+    context = {'follows': user.followings.all(),
+               'mode': 'Followings',
+               'user_followings': user_followings}
+
+    return render(request, 'accounts/followings_list.html', context)

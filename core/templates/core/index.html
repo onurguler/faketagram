@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<h1>Welcome {{ user.username }}</h1>
+<h1>Welcome <a href="{% url 'accounts:profile' username=user.username %}">{{ user.username }}</a></h1>
 <a href="{% url 'accounts:logout' %}">Logout</a>
 {% endif %}
 

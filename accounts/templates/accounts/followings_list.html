@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Followings</h1>
+    {% for follow in follows %}
+        <div class="user">
+            <p>
+                <a href="{% url 'accounts:profile' username=follow.followable.username %}">@{{ follow.followable.username }}</a>
+                {% if follow.followable != user %}
+                    {% if follow.followable not in user_followings %}
+                        <a href="{% url 'accounts:follow' username=follow.followable.username %}">Follow</a>
+                    {% else %}
+                        <a href="{% url 'accounts:unfollow' username=follow.followable.username %}">Unfollow</a>
+                    {% endif %}
+                {% endif %}
+            </p>
+            {% if follow.followable.first_name or follow.followable.last_name %}
+                <a href="{% url 'accounts:profile' username=follow.followable.username %}">
+                    {% if follow.followable.first_name %}
+                        <span class="first_name">{{ follow.followable.first_name }}</span>
+                    {% endif %}
+                    {% if follow.followable.last_name %}
+                        <span class="last_name">{{ follow.followable.last_name }}</span>
+                    {% endif %}
+                </a>
+            {% endif %}
+        </div>
+        <hr>
+    {% endfor %}
+{% endblock content %}
