@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from django.contrib import messages
 
 from accounts.forms import SignUpForm, LoginForm
 
-from django.contrib.auth.models import User
-from accounts.models import Profile, UserFollow
+from accounts.models import UserFollow
 
 
 def signup_view(request):
