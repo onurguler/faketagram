@@ -6,28 +6,30 @@
                 <span class="hidden sm:inline">Faketagram</span>
             </a>
         </div>
-        <div class="flex items-center">
-            <a href="{% url 'core:index' %}" class="mr-4 text-2xl text-gray-600 hover:text-gray-900">
-                <i class="fas fa-home"></i>
-            </a>
-            <a href="#" class="mr-4 text-gray-600 hover:text-gray-900 text-2xl">
-                <i class="far fa-paper-plane"></i>
-            </a>
-            <a href="#" class="mr-4 text-gray-600 hover:text-gray-900 text-2xl">
-                <i class="far fa-compass"></i>
-            </a>
-            <a href="#" class="mr-4 text-gray-600 hover:text-gray-900 text-2xl">
-                <i class="far fa-heart"></i>
-            </a>
-            <a 
-                href="{% url 'accounts:profile' username=user.username %}" 
-                {% if user.username in request.path %}
-                    class="p-px text-gray-600 hover:text-gray-900 rounded-full text-2xl border border-gray-900"
-                {% else %}
-                    class="p-px text-gray-600 hover:text-gray-900 rounded-full text-2xl"
-                {% endif %}>
-                <img class="w-6 h-6 rounded-full object-center object-cover" src="{{ user.profile.photo.url }}" alt="">
-            </a>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="flex items-center">
+                <a href="{% url 'core:index' %}" class="mr-4 text-2xl text-gray-600 hover:text-gray-900">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="#" class="mr-4 text-gray-600 hover:text-gray-900 text-2xl">
+                    <i class="far fa-paper-plane"></i>
+                </a>
+                <a href="#" class="mr-4 text-gray-600 hover:text-gray-900 text-2xl">
+                    <i class="far fa-compass"></i>
+                </a>
+                <a href="#" class="mr-4 text-gray-600 hover:text-gray-900 text-2xl">
+                    <i class="far fa-heart"></i>
+                </a>
+                <a 
+                    href="{% url 'accounts:profile' username=user.username %}" 
+                    {% if user.username in request.path %}
+                        class="p-px text-gray-600 hover:text-gray-900 rounded-full text-2xl border border-gray-900"
+                    {% else %}
+                        class="p-px text-gray-600 hover:text-gray-900 rounded-full text-2xl"
+                    {% endif %}>
+                    <img class="w-6 h-6 rounded-full object-center object-cover" src="{{ user.profile.photo.url }}" alt="">
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>
