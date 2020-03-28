@@ -19,8 +19,9 @@ def signup_view(request):
 
     if form.is_valid():
         user = form.save()
-        user.refresh_from_db()
 
+        user.refresh_from_db()
+        user.profile.full_name = form.cleaned_data.get('full_name')
         user.save()
 
         username = form.cleaned_data.get('username')

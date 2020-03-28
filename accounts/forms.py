@@ -5,16 +5,14 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(
-        max_length=100, help_text='Please tell us your first name (Optional).')
-    last_name = forms.CharField(
-        max_length=100, help_text='Please tell us your last name (Optional).')
+    full_name = forms.CharField(
+        max_length=100, help_text='Please tell us your name (Optional).')
     email = forms.EmailField(
         required=True, max_length=200, label='Email Address', help_text='Required. Please provide a email address.')
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username',
+        fields = ('full_name', 'username',
                   'email', 'password1', 'password2')
 
     def save(self, commit=True):

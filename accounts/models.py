@@ -4,9 +4,12 @@ from django.dispatch import receiver
 
 from django.contrib.auth.models import User
 
+from faketagram.models import TimeStampedModel
 
-class Profile(models.Model):
+
+class Profile(TimeStampedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100, blank=True)
     photo = models.ImageField(upload_to='photos/profile_photos/%Y/%m/%d',
                               default='defaults/photos/default_profile_photo.png')
     bio = models.TextField(blank=True)
@@ -35,7 +38,7 @@ class Profile(models.Model):
         return followings
 
 
-class UserFollow(models.Model):
+class UserFollow(TimeStampedModel):
     follower = models.ForeignKey(
         User, related_name='followings', on_delete=models.CASCADE)
     followable = models.ForeignKey(

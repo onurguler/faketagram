@@ -12,14 +12,9 @@
                     <a href="{% url 'accounts:profile' username=account.username %}">@{{ account.username }}</a>
                 </div>
                 <div>
-                    {% if account.first_name or account.last_name %}
+                    {% if account.profile.full_name %}
                         <a href="{% url 'accounts:profile' username=account.username %}">
-                            {% if account.first_name %}
-                                {{ account.first_name }}
-                            {% endif %}
-                            {% if account.last_name %}
-                                {{ account.last_name }}
-                            {% endif %}
+                            {{ account.profile.full_name }}
                         </a>
                     {% endif %}
                 </div>

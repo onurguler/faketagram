@@ -7,9 +7,12 @@
             <a href="{% url 'accounts:search' %}" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
                 <i class="fas fa-search"></i>
             </a>
-            <a href="#" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
-                <i class="far fa-plus-square"></i>
-            </a>
+            <form name="create_form" id="create-form" action="{% url 'core:index' %}">
+                <label for="image-select" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
+                        <i class="far fa-plus-square"></i>
+                </label>
+                <input class="hidden" type="file" id="image-select" name="image_select" accept="image/*">
+            </form>
             <a href="#" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
                 <i class="far fa-heart"></i>
             </a>
@@ -25,3 +28,12 @@
         </div>
     </div>
 {% endif %}
+
+<script>
+    const createForm = document.getElementById('create-form');
+    const imageSelectInput = document.getElementById('image-select');
+
+    imageSelectInput.addEventListener('change', function (event) {
+        createForm.submit();
+    });
+</script>

@@ -14,14 +14,9 @@
                     {% endif %}
                 {% endif %}
             </p>
-            {% if follow.follower.first_name or follow.follower.last_name %}
+            {% if follow.follower.profile.full_name %}
                 <a href="{% url 'accounts:profile' username=follow.follower.username %}">
-                    {% if follow.follower.first_name %}
-                        <span class="first_name">{{ follow.follower.first_name }}</span>
-                    {% endif %}
-                    {% if follow.follower.last_name %}
-                        <span class="last_name">{{ follow.follower.last_name }}</span>
-                    {% endif %}
+                    {{ follow.follower.profile.full_name }}
                 </a>
             {% endif %}
         </div>
