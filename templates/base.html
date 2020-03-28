@@ -10,7 +10,8 @@
 </head>
 <body class="antialiased bg-gray-50 text-gray-900">
     {% block header %}
-        {% include 'partials/_navbar.html' %}
+        {% comment %} {% include 'partials/_navbar.html' %} {% endcomment %}
+        {% include 'partials/_top_bar.html' %}
     {% endblock header %}
 
     {% if messages %}
@@ -21,7 +22,13 @@
     </ul>
     {% endif %}
     
-    {% block content %}
-    {% endblock content %}
+    <div class="mt-16">
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    {% block bottom_bar %}
+        {% include 'partials/_bottom_bar.html' %}
+    {% endblock bottom_bar %}
 </body>
 </html>
