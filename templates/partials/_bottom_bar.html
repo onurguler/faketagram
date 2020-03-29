@@ -7,11 +7,12 @@
             <a href="{% url 'accounts:search' %}" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
                 <i class="fas fa-search"></i>
             </a>
-            <form name="create_form" id="create-form" action="{% url 'core:index' %}">
-                <label for="image-select" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
+            <form id="create-style-form" action="{% url 'photos:add' %}" method='post' enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="id_image" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
                         <i class="far fa-plus-square"></i>
                 </label>
-                <input class="hidden" type="file" id="image-select" name="image_select" accept="image/*">
+                <input class="hidden" type="file" id="id_image" name="image" accept="image/*" required>
             </form>
             <a href="#" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
                 <i class="far fa-heart"></i>
@@ -30,8 +31,8 @@
 {% endif %}
 
 <script>
-    const createForm = document.getElementById('create-form');
-    const imageSelectInput = document.getElementById('image-select');
+    const createForm = document.getElementById('create-style-form');
+    const imageSelectInput = document.getElementById('id_image');
 
     imageSelectInput.addEventListener('change', function (event) {
         createForm.submit();
