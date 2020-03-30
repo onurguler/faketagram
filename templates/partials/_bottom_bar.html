@@ -1,20 +1,20 @@
 {% if user.is_authenticated %}
     <div class="bg-white border-t fixed bottom-0 w-full">
         <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-2 flex items-center justify-between">
-            <a href="{% url 'core:index' %}" class="w-1/5 text-center mr-4 text-2xl text-gray-600 hover:text-gray-900">
+            <a href="{% url 'core:index' %}" class="w-1/5 text-center text-2xl text-gray-600 hover:text-gray-900">
                 <i class="fas fa-home"></i>
             </a>
-            <a href="{% url 'accounts:search' %}" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
+            <a href="{% url 'accounts:search' %}" class="w-1/5 text-center text-gray-600 hover:text-gray-900 text-2xl">
                 <i class="fas fa-search"></i>
             </a>
-            <form id="create-style-form" action="{% url 'photos:add' %}" method='post' enctype="multipart/form-data">
+            <form id="create-style-form" class="w-1/5 text-center" action="{% url 'photos:add' %}" method='post' enctype="multipart/form-data">
                 {% csrf_token %}
-                <label for="id_image" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
+                <label for="id_image" class="text-gray-600 hover:text-gray-900 text-2xl">
                         <i class="far fa-plus-square"></i>
                 </label>
                 <input class="hidden" type="file" id="id_image" name="image" accept="image/*" required>
             </form>
-            <a href="#" class="w-1/5 text-center mr-4 text-gray-600 hover:text-gray-900 text-2xl">
+            <a href="#" class="w-1/5 text-center text-gray-600 hover:text-gray-900 text-2xl">
                 <i class="far fa-heart"></i>
             </a>
             <a href="{% url 'accounts:profile' username=user.username %}" class="w-1/5 text-center">

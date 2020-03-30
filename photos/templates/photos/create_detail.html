@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+<div class="bg-white border-b sticky top-0 w-full z-10">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-2 flex items-center justify-between">
+        <a href="{% url 'photos:create_style' %}" class="text-2xl text-gray-600 hover:text-gray-900">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <p class="font-bold">New Post</p>
+        <button id="share-button" class="text-blue-500 font-bold hover:text-blue-600 focus:outline-none">Share</button>
+    </div>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+<div class="bg-white border-b">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-4">
+        <div class="flex items-start">
+            <img src="{{ user.profile.photo.url }}" alt="" class="mr-2 w-10 h-10 object-center object-cover rounded-full border">
+            <div class="flex items-center justify-between w-full mt-1">
+                <form method="post" class="w-full mr-4" id="create-detail-form">
+                    {% csrf_token %}
+                    <textarea class="placeholder-gray-600 resize-none w-full focus:outline-none" name="caption" rows="4" id="id_caption" placeholder="Write a caption..."></textarea>
+                </form>
+                <figure class="{{ photo.image_filter }} w-16 h-16">
+                    <img src="{{ photo.image.url }}" alt="" class="w-16 h-16 object-cover object-center">
+                </figure>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block bottom_bar %}
+{% endblock bottom_bar %}
+
+
+{% block javascript %}
+<script>
+    const createDetailForm = document.getElementById('create-detail-form');
+    const shareButton = document.getElementById('share-button');
+
+    shareButton.addEventListener('click', function (event) {
+        createDetailForm.submit();
+    });
+</script>
+{% endblock javascript %}

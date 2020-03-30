@@ -22,14 +22,15 @@
         {% endfor %}
     </ul>
     {% endif %}
-    
-    <div class="mt-16">
-        {% block content %}
-        {% endblock content %}
-    </div>
+
+    {% block content %}
+    {% endblock content %}
 
     {% block bottom_bar %}
         {% include 'partials/_bottom_bar.html' %}
     {% endblock bottom_bar %}
+
+    {% block javascript %}
+    {% endblock javascript %}
 </body>
 </html>

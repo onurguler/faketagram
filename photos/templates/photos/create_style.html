@@ -1,13 +1,134 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
 
-{% if photo %}
-    <img src="{{ photo.image.url }}" alt="" srcset="">
-{% endif %}
+{% block header %}
+<div class="bg-white border-b sticky top-0 w-full z-10">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-2 flex items-center justify-between">
+        <a href="{% url 'photos:create_style_cancel' %}" class="text-2xl text-gray-600 hover:text-gray-900">
+            <i class="fas fa-times"></i>
+        </a>
+        <p class="font-bold">New Photo Post</p>
+        <button id="next-button" class="text-blue-500 font-bold hover:text-blue-600 focus:outline-none">Next</button>
+    </div>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+<div class="max-w-5xl mx-auto sm:px-8 lg:px-10 pb-10">
+    <figure id="image" class="{{ photo.image_filter }}">
+        <img src="{{ photo.image.url }}" alt="" srcset="">
+    </figure>
+</div>
 {% endblock content %}
+
+
+{% block bottom_bar %}
+<div class="bg-white border-t fixed bottom-0 w-full z-10">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10">
+        <form method="post" enctype="multipart/form-data" class="hidden py-2" id="image_filter_form">
+            {% csrf_token %}
+            <div class="flex items-center overflow-x-scroll w-full">
+                {% for choice in form.image_filter.field.choices %}
+                    <div class="mr-4 w-full">
+                        <input id="{{ choice.0 }}" type="radio" name="image_filter" value="{{choice.0}}"
+                        {% ifequal choice.0 photo.image_filter %} 
+                            checked="checked"
+                        {% endifequal %}
+                            class="radio-custom hidden" />
+                        <label for="{{ choice.0 }}" class="radio-custom-label text-gray-600">
+                            <div class="text-center">{{ choice.1 }}</div>
+                            <figure class="{{choice.0}} w-48">
+                                <img src="/media/defaults/photos/create_style.jpeg" alt="">
+                            </figure>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+        <div class="flex items-center justify-between">
+            <button id="filter_button" class="py-2 w-1/2 text-gray-600 border-gray-900 hover:text-gray-900 focus:outline-none">Filter</button>
+            <button id="edit_button" class="py-2 w-1/2 text-gray-600 border-gray-900 hover:text-gray-900 focus:outline-none">Edit</button>
+        </div>
+    </div>
+</div>
+{% endblock bottom_bar %}
+
+
+{% block javascript %}
+<script>
+    window.onload = function () {
+        [].forEach.call(document.querySelectorAll(".radio-custom"), function (el) {
+            el.addEventListener("change", function () {
+                [].forEach.call(document.querySelectorAll(".radio-custom-label"), function(label){
+                    label.classList.remove('text-gray-900');
+                    label.classList.remove('text-gray-600');
+                    label.classList.add('text-gray-600');
+                    label.classList.remove('font-bold');
+                });
+
+                setStyle(this.id);
+            });
+        });
+    }
+
+    const radioButtons = document.querySelectorAll('.radio-custom');
+
+    for(let i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].checked) {
+            setStyle(radioButtons[i].id);
+        }
+    }
+
+    function setStyle(id) {
+        const label = document.querySelector("label[for='" + id + "']");
+        label.classList.remove('text-gray-600');
+        label.classList.add('text-gray-900');
+        label.classList.add('font-bold');
+
+        const image = document.getElementById('image');
+        image.classList.remove(...image.classList);
+        
+        const radio = document.getElementById(id);
+        image.classList.add(radio.value);
+        console.log(radio.value);
+    }
+
+    const imageFilterForm = document.getElementById('image_filter_form');
+    const filterButton = document.getElementById('filter_button');
+    const editButton = document.getElementById('edit_button');
+
+    let imageFilterOpen = false;
+    let editOpen = false;
+
+    filterButton.addEventListener('click', function (event) {
+        if (!imageFilterOpen) {
+            openImageFilterForm();
+            imageFilterOpen = true;
+        } else {
+            closeImageFilterform();
+            imageFilterOpen = false;
+        }
+    })
+
+    function toggleImageFilterForm() {
+        imageFilterForm.classList.toggle('hidden');
+    }
+
+    function openImageFilterForm() {
+        imageFilterForm.classList.remove('hidden');
+        filterButton.classList.add(...['font-bold', 'text-gray-900', 'border-t-4'])
+    }
+
+    function closeImageFilterform() {
+        imageFilterForm.classList.add('hidden');
+        filterButton.classList.remove(...['font-bold', 'text-gray-900', 'border-t-4'])
+    }
+
+    const nextButton = document.getElementById('next-button');
+    nextButton.addEventListener('click', function (event) {
+        imageFilterForm.submit();
+    });
+
+</script>
+{% endblock javascript %}
