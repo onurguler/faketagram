@@ -3,11 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
 from django.contrib import messages
 
 from accounts.forms import SignUpForm, LoginForm
-
 from accounts.models import UserFollow
 
 
@@ -81,6 +79,10 @@ def profile_view(request, username):
         result = user.followers.filter(
             follower__username=request.user.username)
         context['followed'] = True if result else False
+
+    photos = user.photos.all()
+
+    context['photos'] = photos
 
     return render(request, 'accounts/profile.html', context)
 

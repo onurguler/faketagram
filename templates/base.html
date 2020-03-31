@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
     <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/cssgram.min.css' %}">
+    {% block extra_head %}
+    {% endblock extra_head %}
 </head>
 <body class="antialiased bg-gray-50 text-gray-900">
     {% block header %}
