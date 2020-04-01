@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic import DetailView
 from photos.forms import PhotoAddForm, PhotoCreateStyleForm, PhotoCreateDetailForm
 from photos.models import Photo
 
@@ -76,3 +77,12 @@ def create_detail_view(request):
     context = {'form': form, 'photo': photo}
 
     return render(request, 'photos/create_detail.html', context)
+
+
+class PhotoDetailView(DetailView):
+    model = Photo
+    template_name = "photos/photo_detail.html"
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(published=True)
+        return qs

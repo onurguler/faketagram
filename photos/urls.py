@@ -10,4 +10,5 @@ urlpatterns = [
     path('create/style/cancel/', views.create_style_cancel_view,
          name='create_style_cancel'),
     path('create/detail/', views.create_detail_view, name='create_detail'),
+    path('<int:pk>', views.PhotoDetailView.as_view(), name='photo_detail'),
 ]

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto md:px-8 lg:px-10">
+    <div class="p-4 flex items-center justify-between">
+        <div class="flex items-center">
+            <img class="mr-4 w-8 h-8 rounded-full object-center object-cover" src="{{ photo.user.profile.photo.url }}" alt="">
+            <div>
+                <h2 class="font-bold text-sm leading-tight">{{ photo.user.username }} <span class="mx-1">•</span> <span>Following</span></h2>
+                <p class="text-xs leading-tight">Bilgisayar Mühendisliği</p>
+            </div>
+        </div>
+        <button class="px-2 py-1 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none"><i class="fas fa-ellipsis-h"></i></button>
+    </div>
+    <figure class="{{ photo.image_filter }}">
+        <img src="{{ photo.image.url }}" alt="">
+    </figure>
+</div>
+{% endblock content %}
