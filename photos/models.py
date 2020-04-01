@@ -50,6 +50,16 @@ class Photo(TimeStampedModel):
         return f'{self.user.username} - {self.created_at}'
 
 
+class Like(TimeStampedModel):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='likes')
+    photo = models.ForeignKey(
+        Photo, on_delete=models.CASCADE, related_name='likes')
+
+    def __str__(self):
+        return f'{self.user.username} liked {self.photo}'
+
+
 # TODO: fotoğraf silindiğinde ve değiştirildiğinde eskisini media klasöründen
 # silmek için django-cleanup kullan
 # @receiver(models.signals.post_delete, sender=Photo)

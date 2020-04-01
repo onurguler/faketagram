@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
 from photos.forms import PhotoAddForm, PhotoCreateStyleForm, PhotoCreateDetailForm
-from photos.models import Photo
+from photos.models import Photo, Like
 
 
 @login_required
@@ -86,3 +86,38 @@ class PhotoDetailView(DetailView):
     def get_queryset(self):
         qs = super().get_queryset().filter(published=True)
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["liked"] = False
+
+        if self.request.user.is_authenticated:
+            like_qs_exists = self.object.likes.filter(
+                user=self.request.user).exists()
+            context['liked'] = like_qs_exists
+
+        return context
+
+
+@login_required
+def like_view(request, photo_id):
+    photo = get_object_or_404(Photo, pk=photo_id, published=True)
+    like_qs = photo.likes.filter(user=request.user)
+
+    if not like_qs.exists():
+        Like.objects.create(user=request.user, photo=photo)
+
+    return redirect('photos:photo_detail', pk=photo.pk)
+
+
+@login_required
+def unlike_view(request, photo_id):
+    photo = get_object_or_404(Photo, pk=photo_id, published=True)
+    like_qs = photo.likes.filter(user=request.user)
+
+    if like_qs.exists():
+        like = like_qs[0]
+        like.delete()
+
+    return redirect('photos:photo_detail', pk=photo.pk)
