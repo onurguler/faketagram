@@ -3,9 +3,13 @@
 <div class="md:border md:rounded mb-4 md:pb-2">
     <div class="p-4 flex items-center justify-between">
         <div class="flex items-center">
-            <img class="mr-4 w-8 h-8 rounded-full object-center object-cover" src="{{ photo.user.profile.photo.url }}" alt="">
+            <a href="{% url 'profiles:profile_detail' username=photo.user.username %}">
+                <img class="mr-4 w-8 h-8 rounded-full object-center object-cover" src="{{ photo.user.profile.photo.url }}" alt="">
+            </a>
             <div>
-                <h2 class="font-bold text-sm leading-tight">{{ photo.user.username }} <span class="mx-1">•</span> <span>Following</span></h2>
+                <a href="{% url 'profiles:profile_detail' username=photo.user.username %}">
+                    <h2 class="font-bold text-sm leading-tight">{{ photo.user.username }}</h2>
+                </a>
                 <p class="text-xs leading-tight">Bilgisayar Mühendisliği</p>
             </div>
         </div>
@@ -31,15 +35,14 @@
             <a href="{% url 'photos:like_list' photo_id=photo.pk %}" class="font-bold">{{ photo.likes.count }} likes</a>
         </p>
     </div>
-    <div class="px-4 flex items-start">
-        <img class="hidden sm:block mr-4 w-8 h-8 rounded-full object-center object-cover" src="{{ photo.user.profile.photo.url }}" alt="">
-        <div>
-            <p class="text-sm leading-tight">
-                <span class="font-bold">{{ photo.user.username }}</span>
-                {{ photo.caption }}
-            </p>
-            <p class="mt-2 text-xs text-gray-600 uppercase">{{ photo.published_at | naturaltime }}</p>
-        </div>
+    <div class="px-4">
+        <p class="text-sm leading-tight">
+            <a href="{% url 'profiles:profile_detail' username=photo.user.username %}" class="font-bold">{{ photo.user.username }}</a>
+            {{ photo.caption }}
+        </p>
+    </div>
+    <div class="px-4">
+        <p class="mt-2 text-xs text-gray-600 uppercase">{{ photo.published_at | naturaltime }}</p>
     </div>
 </div>
 {% endfor %}
