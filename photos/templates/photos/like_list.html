@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<div class="bg-white border-b sticky top-0 w-full z-10">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-1 flex items-center justify-between">
+        <a href="{% url 'photos:photo_detail' pk=photo_id %}" class="text-2xl text-gray-600 hover:text-gray-900">
+            <i class="fas fa-times"></i>
+        </a>
+        <p class="font-bold">Likes</p>
+        <span></span>
+    </div>
+</div>
+{% endblock header %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-10">
+    {% for like in likes %}
+        <div class="py-2 flex items-center justify-between">
+            <a href="{% url 'accounts:profile' username=like.user.username %}">
+                <div class="flex items-center">
+                    <img class="w-10 h-10 border rounded-full object-center object-cover" src="{{ like.user.profile.photo.url }}" alt="">
+                    <div class="ml-3">
+                        <h2 class="text-sm font-bold leading-tight">{{ like.user.username }}</h2>
+                        <p class="text-sm leading-tight text-gray-600">{{ like.user.profile.full_name }}</p>
+                    </div>
+                </div>
+            </a>
+            {% if user_followings and like.user in user_followings %}
+                <a href="{% url 'accounts:unfollow' username=like.user.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Unfollow</a>
+            {% else %}
+                <a href="{% url 'accounts:follow' username=like.user.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Follow</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

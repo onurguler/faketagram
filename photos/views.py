@@ -121,3 +121,23 @@ def unlike_view(request, photo_id):
         like.delete()
 
     return redirect('photos:photo_detail', pk=photo.pk)
+
+
+def like_list_view(request, photo_id):
+    # TODO: html sayfası yok
+    # TODO: likeları son eklenene göre sırala
+    photo = get_object_or_404(Photo, pk=photo_id, published=True)
+    likes = photo.likes.order_by('-created_at')
+
+    if likes.count() <= 0:
+        return redirect('photos:photo_detail', pk=photo.pk)
+
+    user_followings = None
+
+    if request.user.is_authenticated:
+        user_followings = request.user.profile.get_followings()
+
+    context = {'likes': likes, 'photo_id': photo_id,
+               'user_followings': user_followings}
+
+    return render(request, 'photos/like_list.html', context)
