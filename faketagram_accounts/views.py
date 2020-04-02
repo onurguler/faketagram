@@ -69,24 +69,6 @@ def logout_view(request):
     return redirect('accounts:login')
 
 
-def profile_view(request, username):
-    user = get_object_or_404(User, username=username)
-
-    context = {'profile': user.profile}
-
-    context['can_follow'] = True if username != request.user.username else False
-    if request.user.is_authenticated and context['can_follow']:
-        result = user.followers.filter(
-            follower__username=request.user.username)
-        context['followed'] = True if result else False
-
-    photos = user.photos.all()
-
-    context['photos'] = photos
-
-    return render(request, 'accounts/profile.html', context)
-
-
 @login_required
 def follow_view(request, username):
     followable = get_object_or_404(User, username=username)

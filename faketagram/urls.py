@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('faketagram_accounts.urls', namespace='accounts')),
     path('photos/', include('faketagram_photos.urls', namespace='photos')),
+    path('', include('faketagram_profiles.urls', namespace='profiles'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

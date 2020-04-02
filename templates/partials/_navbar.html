@@ -21,7 +21,7 @@
                     <i class="far fa-heart"></i>
                 </a>
                 <a 
-                    href="{% url 'accounts:profile' username=user.username %}" 
+                    href="{% url 'profiles:profile_detail' username=user.username %}" 
                     {% if user.username in request.path %}
                         class="p-px text-gray-600 hover:text-gray-900 rounded-full text-2xl border border-gray-900"
                     {% else %}

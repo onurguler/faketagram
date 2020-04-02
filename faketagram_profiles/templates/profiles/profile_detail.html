@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block extra_head %}
 <style>
     .photo-container {
@@ -24,8 +25,23 @@
     }
 </style>
 {% endblock extra_head %}
+
 {% block header %}
-    {% include 'accounts/partials/_profile_top_bar.html' %}
+<div class="bg-white border-b sticky top-0 w-full z-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-1 flex items-center justify-between">
+        <a href="{{request.META.HTTP_REFERER}}" class="text-2xl text-gray-600 hover:text-gray-900">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <p class="font-semibold">{{ profile.user.username }}</p>
+        {% if user == profile.user %}
+            <a href="#" class="text-gray-600 hover:text-gray-900 text-2xl">
+                <i class="fas fa-cog"></i>
+            </a>
+        {% else %}
+        <p></p>
+        {% endif %}
+    </div>
+</div>
 {% endblock header %}
 
 {% block content %}
