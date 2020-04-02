@@ -130,9 +130,9 @@ def followers_list_view(request, username):
     if user.is_authenticated:
         user_followings = request.user.profile.get_followings()
 
-    context = {'follows': user.followers.all(),
-               'mode': 'Followers',
-               'user_followings': user_followings}
+    context = {'followers': user.followers.all(),
+               'user_followings': user_followings,
+               'profile_username': username}
 
     return render(request, 'accounts/followers_list.html', context)
 
@@ -144,9 +144,9 @@ def followings_list_view(request, username):
     if user.is_authenticated:
         user_followings = request.user.profile.get_followings()
 
-    context = {'follows': user.followings.all(),
-               'mode': 'Followings',
-               'user_followings': user_followings}
+    context = {'following': user.followings.all(),
+               'user_followings': user_followings,
+               'profile_username': username}
 
     return render(request, 'accounts/followings_list.html', context)
 

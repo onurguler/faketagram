@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% comment %} {% block content %}
     <h1>Followings</h1>
     {% for follow in follows %}
         <div class="user">
@@ -22,4 +22,41 @@
         </div>
         <hr>
     {% endfor %}
+{% endblock content %} {% endcomment %}
+
+{% block header %}
+<div class="bg-white border-b sticky top-0 w-full z-10">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-1 flex items-center justify-between">
+        <a href="{% url 'accounts:profile' username=profile_username %}" class="text-2xl text-gray-600 hover:text-gray-900">
+            <i class="fas fa-times"></i>
+        </a>
+        <p class="font-bold">Following</p>
+        <span></span>
+    </div>
+</div>
+{% endblock header %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-10">
+    {% for follow in following %}
+        <div class="py-2 flex items-center justify-between">
+            <a href="{% url 'accounts:profile' username=follow.followable.username %}">
+                <div class="flex items-center">
+                    <img class="w-10 h-10 border rounded-full object-center object-cover" src="{{ follow.followable.profile.photo.url }}" alt="">
+                    <div class="ml-3">
+                        <h2 class="text-sm font-bold leading-tight">{{ follow.followable.username }}</h2>
+                        {% if follow.followable.profile.full_name %}
+                            <p class="text-sm leading-tight text-gray-600">{{ follow.follower.profile.full_name }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+            {% if user_followings and follow.followable in user_followings %}
+                <a href="{% url 'accounts:unfollow' username=follow.follower.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Unfollow</a>
+            {% elif follow.followable != user %}
+                <a href="{% url 'accounts:follow' username=follow.followable.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Follow</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
 {% endblock content %}
