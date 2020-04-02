@@ -27,7 +27,7 @@
             </a>
             {% if user_followings and like.user in user_followings %}
                 <a href="{% url 'accounts:unfollow' username=like.user.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Unfollow</a>
-            {% else %}
+            {% elif like.user != user %}
                 <a href="{% url 'accounts:follow' username=like.user.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Follow</a>
             {% endif %}
         </div>
