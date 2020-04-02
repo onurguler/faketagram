@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
 from django.utils import timezone
+from django.template.loader import render_to_string
 from photos.forms import PhotoAddForm, PhotoCreateStyleForm, PhotoCreateDetailForm
 from photos.models import Photo, Like
 
@@ -142,3 +143,15 @@ def like_list_view(request, photo_id):
                'user_followings': user_followings}
 
     return render(request, 'photos/like_list.html', context)
+
+
+def get_feed(user):
+    photos = Photo.objects.filter(
+        user__followers__follower=user, published=True).order_by('-published_at')
+
+    user_likes = []
+    for like in user.likes.all():
+        user_likes.append(like.photo.pk)
+
+    return render_to_string(
+        'photos/feed.html', context={'photos': photos, 'user_likes': user_likes})
