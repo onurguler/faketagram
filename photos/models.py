@@ -45,6 +45,7 @@ class Photo(TimeStampedModel):
     image_filter = models.CharField(
         choices=IMAGE_FILTER_CHOICES, max_length=15, default=IMAGE_FILTER_CHOICES[0][0])
     published = models.BooleanField(default=False)
+    published_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.user.username} - {self.created_at}'

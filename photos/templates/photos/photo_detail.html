@@ -40,7 +40,7 @@
                         <span class="font-bold">{{ photo.user.username }}</span>
                         {{ photo.caption }}
                     </p>
-                    <p class="mt-2 text-xs text-gray-600">{{ photo.created_at | naturaltime }}</p>
+                    <p class="mt-2 text-xs text-gray-600">{{ photo.published_at | naturaltime }}</p>
                 </div>
             </div>
             <div class="px-4 py-2 flex items-center justify-between">
@@ -70,7 +70,7 @@
                 </p>
             </div>
             <div class="px-4 pb-2 flex items-start border-b">
-                <p class="text-xs text-gray-600 leading-tight uppercase">{{ photo.created_at | naturaltime }}</p>
+                <p class="text-xs text-gray-600 leading-tight uppercase">{{ photo.published_at | naturaltime }}</p>
             </div>
             <div class="px-2 py-4 flex text-sm">
                 <input class="px-2 placeholder-gray-600 w-full" type="text" placeholder="Add a comment...">
@@ -127,7 +127,7 @@
                 <span class="font-bold">{{ photo.user.username }}</span>
                 {{ photo.caption }}
             </p>
-            <p class="mt-2 text-xs text-gray-600 uppercase">{{ photo.created_at | naturaltime }}</p>
+            <p class="mt-2 text-xs text-gray-600 uppercase">{{ photo.published_at | naturaltime }}</p>
         </div>
     </div>
 </div>

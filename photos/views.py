@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
+from django.utils import timezone
 from photos.forms import PhotoAddForm, PhotoCreateStyleForm, PhotoCreateDetailForm
 from photos.models import Photo, Like
 
@@ -69,10 +70,10 @@ def create_detail_view(request):
     if form.is_valid():
         photo = form.save(commit=False)
         photo.published = True
+        photo.published_at = timezone.now()
         photo.save()
 
-        # TODO: return redirect('photos:photo_detail' photo_id=photo.pk)
-        return redirect('core:index')
+        return redirect('photos:photo_detail', pk=photo.pk)
 
     context = {'form': form, 'photo': photo}
 
