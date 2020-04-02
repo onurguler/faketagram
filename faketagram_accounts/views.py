@@ -1,12 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib import messages
 
 from faketagram_accounts.forms import SignUpForm, LoginForm
-from faketagram_accounts.models import UserFollow
 
 
 def signup_view(request):
@@ -67,70 +65,6 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'Logout successful.')
     return redirect('accounts:login')
-
-
-@login_required
-def follow_view(request, username):
-    followable = get_object_or_404(User, username=username)
-
-    if followable != request.user:
-        _, created = UserFollow.objects.get_or_create(
-            follower=request.user, followable=followable)
-
-        if created:
-            messages.success(
-                request, f'You have successfully followed {followable.username}.')
-        else:
-            messages.warning(
-                request, f'You have already followed {followable.username}.')
-    else:
-        messages.warning(request, 'You cannot follow yourself.')
-
-    return redirect('accounts:profile', username=followable.username)
-
-
-@login_required
-def unfollow_view(request, username):
-    followable = get_object_or_404(User, username=username)
-
-    if followable != request.user:
-        follow = get_object_or_404(
-            UserFollow, follower=request.user, followable=followable)
-        follow.delete()
-        messages.success(
-            request, f'You have just unfollowed {followable.username}')
-    else:
-        messages.warning(request, 'You cannot unfollow yourself.')
-
-    return redirect('accounts:profile', username=followable.username)
-
-
-def followers_list_view(request, username):
-    user = get_object_or_404(User, username=username)
-    user_followings = None
-
-    if user.is_authenticated:
-        user_followings = request.user.profile.get_followings()
-
-    context = {'followers': user.followers.all(),
-               'user_followings': user_followings,
-               'profile_username': username}
-
-    return render(request, 'accounts/followers_list.html', context)
-
-
-def followings_list_view(request, username):
-    user = get_object_or_404(User, username=username)
-    user_followings = None
-
-    if user.is_authenticated:
-        user_followings = request.user.profile.get_followings()
-
-    context = {'following': user.followings.all(),
-               'user_followings': user_followings,
-               'profile_username': username}
-
-    return render(request, 'accounts/followings_list.html', context)
 
 
 def search_accounts_view(request):

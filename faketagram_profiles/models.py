@@ -21,8 +21,8 @@ class Profile(TimeStampedModel):
         return self.user.followers.all().count()
 
     @property
-    def followings(self):
-        return self.user.followings.all().count()
+    def following(self):
+        return self.user.following.all().count()
 
     def get_followers(self):
         followers = []
@@ -30,11 +30,11 @@ class Profile(TimeStampedModel):
             followers.append(follow.follower)
         return followers
 
-    def get_followings(self):
-        followings = []
-        for follow in self.user.followings.all():
-            followings.append(follow.followable)
-        return followings
+    def get_following(self):
+        following = []
+        for follow in self.user.following.all():
+            following.append(follow.followable)
+        return following
 
 
 @receiver(post_save, sender=User)

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'faketagram_accounts',
     'faketagram_profiles',
+    'faketagram_follows',
     'faketagram_core',
     'faketagram_photos',
 ]

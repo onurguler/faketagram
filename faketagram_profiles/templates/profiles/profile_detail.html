@@ -60,9 +60,9 @@
                         {% else %}
                             {% if can_follow %}
                                 {% if followed %}
-                                    <a href="{% url 'accounts:unfollow' username=profile.user.username %}" class="hidden md:inline ml-4 px-6 py-1 text-white bg-blue-500 font-semibold text-sm rounded hover:bg-blue-600 focus:outline-none">Unfollow</a>
+                                    <a href="{% url 'follows:unfollow_user' username=profile.user.username %}" class="hidden md:inline ml-4 px-6 py-1 text-white bg-blue-500 font-semibold text-sm rounded hover:bg-blue-600 focus:outline-none">Unfollow</a>
                                 {% else %}
-                                    <a href="{% url 'accounts:follow' username=profile.user.username %}" class="hidden md:inline ml-4 px-6 py-1 text-white bg-blue-500 font-semibold text-sm rounded hover:bg-blue-600 focus:outline-none">Follow</a>
+                                    <a href="{% url 'follows:follow_user' username=profile.user.username %}" class="hidden md:inline ml-4 px-6 py-1 text-white bg-blue-500 font-semibold text-sm rounded hover:bg-blue-600 focus:outline-none">Follow</a>
                                 {% endif %}
                             {% endif %}
                         {% endif %}
@@ -73,17 +73,17 @@
                         {% else %}
                             {% if can_follow %}
                                 {% if followed %}
-                                    <a href="{% url 'accounts:unfollow' username=profile.user.username %}" class="px-6 py-1 block w-full text-center text-white bg-blue-500 font-semibold text-sm rounded hover:bg-blue-600 focus:outline-none">Unfollow</a>
+                                    <a href="{% url 'follows:unfollow_user' username=profile.user.username %}" class="px-6 py-1 block w-full text-center text-white bg-blue-500 font-semibold text-sm rounded hover:bg-blue-600 focus:outline-none">Unfollow</a>
                                 {% else %}
-                                    <a href="{% url 'accounts:follow' username=profile.user.username %}" class="px-6 py-1 block w-full text-center text-white bg-blue-500 font-semibold text-sm rounded hover:bg-blue-600 focus:outline-none">Follow</a>
+                                    <a href="{% url 'follows:follow_user' username=profile.user.username %}" class="px-6 py-1 block w-full text-center text-white bg-blue-500 font-semibold text-sm rounded hover:bg-blue-600 focus:outline-none">Follow</a>
                                 {% endif %}
                             {% endif %}
                         {% endif %}
                     </div>
                     <div class="hidden mt-4 md:flex items-center">
                         <p class="mr-8"><span class="font-bold">{{ photos.count }}</span> posts</p>
-                        <a href="{% url 'accounts:followers' username=profile.user.username %}" class="mr-8"><span class="font-bold">{{ profile.followers }}</span> followers</a>
-                        <a href="{% url 'accounts:followings' username=profile.user.username %}"><span class="font-bold">{{ profile.followings }}</span> following</a>
+                        <a href="{% url 'follows:user_followers' username=profile.user.username %}" class="mr-8"><span class="font-bold">{{ profile.followers }}</span> followers</a>
+                        <a href="{% url 'follows:user_following' username=profile.user.username %}"><span class="font-bold">{{ profile.following }}</span> following</a>
                     </div>
                     {% if profile.full_name or profile.bio %}
                         <div class="mt-4 hidden md:block">
@@ -113,12 +113,12 @@
                 <p class="font-bold">{{ photos.count }}</p>
                 <p class="text-gray-600">posts</p>
             </div>
-            <a href="{% url 'accounts:followers' username=profile.user.username %}" class="block w-1/3 text-center leading-tight">
+            <a href="{% url 'follows:user_followers' username=profile.user.username %}" class="block w-1/3 text-center leading-tight">
                 <p class="font-bold">{{ profile.followers }}</p>
                 <p class="text-gray-600">followers</p>
             </a>
-            <a href="{% url 'accounts:followings' username=profile.user.username %}" class="block w-1/3 text-center leading-tight">
-                <p class="font-bold">{{ profile.followings }}</p>
+            <a href="{% url 'follows:user_following' username=profile.user.username %}" class="block w-1/3 text-center leading-tight">
+                <p class="font-bold">{{ profile.following }}</p>
                 <p class="text-gray-600">following</p>
             </a>
         </div>

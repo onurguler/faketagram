@@ -27,10 +27,10 @@
                     </div>
                 </div>
             </a>
-            {% if user_followings and follow.followable in user_followings %}
-                <a href="{% url 'accounts:unfollow' username=follow.follower.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Unfollow</a>
+            {% if user_following and follow.followable in user_following %}
+                <a href="{% url 'follows:unfollow_user' username=follow.followable.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Unfollow</a>
             {% elif follow.followable != user %}
-                <a href="{% url 'accounts:follow' username=follow.followable.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Follow</a>
+                <a href="{% url 'follows:follow_user' username=follow.followable.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Follow</a>
             {% endif %}
         </div>
     {% endfor %}

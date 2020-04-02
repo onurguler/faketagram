@@ -135,13 +135,13 @@ def like_list_view(request, photo_id):
     if likes.count() <= 0:
         return redirect('photos:photo_detail', pk=photo.pk)
 
-    user_followings = None
+    user_following = None
 
     if request.user.is_authenticated:
-        user_followings = request.user.profile.get_followings()
+        user_following = request.user.profile.get_following()
 
     context = {'likes': likes, 'photo_id': photo_id,
-               'user_followings': user_followings}
+               'user_following': user_following}
 
     return render(request, 'photos/like_list.html', context)
 
