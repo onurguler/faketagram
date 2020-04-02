@@ -1,5 +1,5 @@
 from django.urls import path
-from accounts import views
+from faketagram_accounts import views
 
 
 app_name = 'accounts'

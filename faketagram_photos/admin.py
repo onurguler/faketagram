@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from photos.models import Photo, Like
+from faketagram_photos.models import Photo, Like
 
 
 admin.site.register(Photo)

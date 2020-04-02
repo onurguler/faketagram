@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from accounts.forms import SignUpForm, LoginForm
-from accounts.models import UserFollow
+from faketagram_accounts.forms import SignUpForm, LoginForm
+from faketagram_accounts.models import UserFollow
 
 
 def signup_view(request):

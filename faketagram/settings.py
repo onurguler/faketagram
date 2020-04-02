@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'accounts',
-    'core',
-    'photos',
+    'faketagram_accounts',
+    'faketagram_core',
+    'faketagram_photos',
 ]
 
 MIDDLEWARE = [

@@ -8,7 +8,10 @@ class SignUpForm(UserCreationForm):
     full_name = forms.CharField(
         max_length=100, help_text='Please tell us your name (Optional).')
     email = forms.EmailField(
-        required=True, max_length=200, label='Email Address', help_text='Required. Please provide a email address.')
+        required=True,
+        max_length=200,
+        label='Email Address',
+        help_text='Required. Please provide a email address.')
 
     class Meta:
         model = User

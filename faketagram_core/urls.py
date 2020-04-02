@@ -1,5 +1,5 @@
 from django.urls import path
-from core import views
+from faketagram_core import views
 
 app_name = 'core'
 

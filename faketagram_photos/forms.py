@@ -1,5 +1,5 @@
 from django import forms
-from photos.models import Photo
+from faketagram_photos.models import Photo
 
 
 class PhotoAddForm(forms.ModelForm):

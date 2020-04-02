@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
 from django.utils import timezone
 from django.template.loader import render_to_string
-from photos.forms import PhotoAddForm, PhotoCreateStyleForm, PhotoCreateDetailForm
-from photos.models import Photo, Like
+
+from faketagram_photos.forms import PhotoAddForm, PhotoCreateStyleForm, PhotoCreateDetailForm
+from faketagram_photos.models import Photo, Like
 
 
 @login_required
