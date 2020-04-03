@@ -127,8 +127,6 @@ def unlike_view(request, photo_id):
 
 
 def like_list_view(request, photo_id):
-    # TODO: html sayfası yok
-    # TODO: likeları son eklenene göre sırala
     photo = get_object_or_404(Photo, pk=photo_id, published=True)
     likes = photo.likes.order_by('-created_at')
 
