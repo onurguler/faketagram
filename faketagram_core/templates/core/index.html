@@ -8,11 +8,66 @@
 <a href="{% url 'accounts:logout' %}">Logout</a>
 
 <div class="max-w-5xl mx-auto md:px-8 lg:px-10">
-    {{ feed | safe }}
-    <div class="text-center py-4">
+    <!-- {{ feed | safe }} -->
+    <div class="feed"></div>
+    <div class="loading text-center py-4">
         <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     </div>
 </div>
 {% endif %}
 
 {% endblock content %}
+
+{% block javascript %}
+<script>
+    function loadFeed() {
+        var page = 1;
+        var pollingForData = false;
+        var xhr = new XMLHttpRequest();
+        var feedContainer = document.querySelector('.feed');
+        var loadingContainer = document.querySelector('.loading');
+
+        xhr.open('GET', '?page=' + page, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send();
+
+        function listenScroll() {
+            var height = document.documentElement.offsetHeight;
+            var offset = document.documentElement.scrollTop + window.innerHeight;
+
+            if (!pollingForData && offset == height) {
+                pollingForData = true;
+                loadingContainer.classList.remove('hidden');
+
+                page++;
+
+                xhr.open('GET', '?page=' + page, true);
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.send();
+            }
+        }
+
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                pollingForData = false;
+                loadingContainer.classList.add('hidden');
+
+                var data = xhr.responseText;
+                var dataObj = JSON.parse(data);
+
+                feedContainer.innerHTML += dataObj.html;
+
+                if (dataObj.html == '') {
+                    document.removeEventListener('scroll', listenScroll);
+                }
+            }
+        }
+
+        document.addEventListener('scroll', listenScroll);
+    }
+
+    window.onload = function () {
+        loadFeed();
+    }
+</script>
+{% endblock javascript %}
