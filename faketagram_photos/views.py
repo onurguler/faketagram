@@ -112,6 +112,14 @@ def like_view(request, photo_id):
 
     if not like_qs.exists():
         Like.objects.create(user=request.user, photo=photo)
+        result = "create"
+    else:
+        like = like_qs[0]
+        like.delete()
+        result = "destroy"
+
+    if request.is_ajax():
+        return JsonResponse({'result': result, 'likes': photo.likes.count()})
 
     return redirect('photos:photo_detail', pk=photo.pk)
 

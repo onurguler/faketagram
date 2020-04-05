@@ -17,10 +17,14 @@
 {% block content %}
 <div class="hidden md:block max-w-5xl mx-auto md:px-8 lg:px-10 py-10">
     <div class="flex items-center w-full border rounded overflow-hidden bg-gray-50">
-        <div class="max-w-2xl w-full">
+        <div class="relative max-w-2xl w-full">
             <figure class="{{ photo.image_filter }}">
                 <img src="{{ photo.image.url }}" alt="">
             </figure>
+            <div id="overlay-like-{{ photo.pk }}" class="hidden absolute inset-0 w-full h-full bg-black opacity-50"></div>
+            <div id="overlay-like-icon-{{ photo.pk }}" class="hidden absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
+                <i class="fas fa-heart"></i>
+            </div>
         </div>
         <div class="max-w-xs w-full border-l bg-white">
             <div class="p-4 flex items-center justify-between border-b">
@@ -45,10 +49,15 @@
             </div>
             <div class="px-4 py-2 flex items-center justify-between">
                 <div class="flex items-center">
-                    {% if not liked %}
+                    {% comment %} {% if not liked %}
                         <a href="{% url 'photos:like' photo_id=photo.pk %}" class="text-2xl"><i class="far fa-heart"></i></a>
                     {% else %}
                         <a href="{% url 'photos:unlike' photo_id=photo.pk %}" class="text-2xl text-red-500"><i class="fas fa-heart"></i></a>
+                    {% endif %} {% endcomment %}
+                    {% if not liked %}
+                        <button class="text-2xl focus:outline-none" data-photo-id="{{ photo.pk }}" onclick="likePhoto(event)"><i class="like-icon far fa-heart"></i></button>
+                    {% else %}
+                        <button onclick="likePhoto(event)" class="text-2xl focus:outline-none" data-photo-id="{{ photo.pk }}"><i class="like-icon fas fa-heart text-red-500"></i></button>
                     {% endif %}
                     <a href="#" class="ml-4 text-2xl"><i class="far fa-comment"></i></a>
                     <a href="#" class="ml-4 text-2xl"><i class="far fa-paper-plane"></i></a>
@@ -66,7 +75,7 @@
             </div> {% endcomment %}
             <div class="px-4 pb-2 flex items-start">
                 <p class="text-sm leading-tight">
-                    <a href="{% url 'photos:like_list' photo_id=photo.pk %}" class="font-bold">{{ photo.likes.count }} likes</a>
+                    <a href="{% url 'photos:like_list' photo_id=photo.pk %}" class="font-bold"><span id="likes-count-{{ photo.pk }}">{{ photo.likes.count }}</span> likes</a>
                 </p>
             </div>
             <div class="px-4 pb-2 flex items-start border-b">
@@ -91,15 +100,26 @@
         </div>
         <button class="px-2 py-1 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none"><i class="fas fa-ellipsis-h"></i></button>
     </div>
-    <figure class="{{ photo.image_filter }}">
-        <img src="{{ photo.image.url }}" alt="">
-    </figure>
+    <div class="relative">
+        <figure class="{{ photo.image_filter }}">
+            <img src="{{ photo.image.url }}" alt="">
+        </figure>
+        <div id="overlay-like-{{ photo.pk }}" class="hidden absolute inset-0 w-full h-full bg-black opacity-50"></div>
+        <div id="overlay-like-icon-{{ photo.pk }}" class="hidden absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
+            <i class="fas fa-heart"></i>
+        </div>
+    </div>
     <div class="px-4 py-2 flex items-center justify-between">
         <div class="flex items-center">
-            {% if not liked %}
+            {% comment %} {% if not liked %}
                 <a href="{% url 'photos:like' photo_id=photo.pk %}" class="text-2xl"><i class="far fa-heart"></i></a>
             {% else %}
                 <a href="{% url 'photos:unlike' photo_id=photo.pk %}" class="text-2xl text-red-500"><i class="fas fa-heart"></i></a>
+            {% endif %} {% endcomment %}
+            {% if not liked %}
+                <button class="text-2xl focus:outline-none" data-photo-id="{{ photo.pk }}" onclick="likePhoto(event)"><i class="like-icon far fa-heart"></i></button>
+            {% else %}
+                <button onclick="likePhoto(event)" class="text-2xl focus:outline-none" data-photo-id="{{ photo.pk }}"><i class="like-icon fas fa-heart text-red-500"></i></button>
             {% endif %}
             <a href="#" class="ml-4 text-2xl"><i class="far fa-comment"></i></a>
             <a href="#" class="ml-4 text-2xl"><i class="far fa-paper-plane"></i></a>
@@ -117,7 +137,7 @@
     </div> {% endcomment %}
     <div class="mb-2 px-4 flex items-start">
         <p class="text-sm leading-tight">
-            <a href="{% url 'photos:like_list' photo_id=photo.pk %}" class="font-bold">{{ photo.likes.count }} likes</a>
+            <a href="{% url 'photos:like_list' photo_id=photo.pk %}" class="font-bold"><span id="likes-count-{{ photo.pk }}">{{ photo.likes.count }}</span> likes</a>
         </p>
     </div>
     <div class="px-4 flex items-start">
@@ -132,3 +152,72 @@
     </div>
 </div>
 {% endblock content %}
+
+{% block javascript %}
+<script>
+    function likePhoto(e) {
+        var photoId = e.target.parentElement.getAttribute('data-photo-id');
+        var likeIcons = document.querySelectorAll('.like-icon');
+        var likeOverlays = document.querySelectorAll('#overlay-like-' + photoId);
+        var likeOverlayIcons = document.querySelectorAll('#overlay-like-icon-' + photoId);
+        
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', '/photos/' + photoId + '/like', true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send();
+
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                var data = xhr.responseText;
+                var dataObj = JSON.parse(data);
+
+                likeOverlays[0].classList.remove('hidden');
+                likeOverlays[1].classList.remove('hidden');
+                likeOverlayIcons[0].classList.remove('hidden');
+                likeOverlayIcons[1].classList.remove('hidden');
+                setTimeout(function () {
+                    likeOverlays[0].classList.add('hidden');
+                    likeOverlays[1].classList.add('hidden');
+                    likeOverlayIcons[0].classList.add('hidden');
+                    likeOverlayIcons[1].classList.add('hidden');
+                }, 1000);
+
+                if (dataObj.result == 'create') {
+                    likeIcons[0].classList.add('text-red-500');
+                    likeIcons[0].classList.remove('far');
+                    likeIcons[0].classList.add('fas');
+
+                    likeIcons[1].classList.add('text-red-500');
+                    likeIcons[1].classList.remove('far');
+                    likeIcons[1].classList.add('fas');
+
+                    likeOverlayIcons[0].classList.remove('text-white');
+                    likeOverlayIcons[0].classList.add('text-red-500');
+                    likeOverlayIcons[1].classList.remove('text-white');
+                    likeOverlayIcons[1].classList.add('text-red-500');
+                } else if(dataObj.result == 'destroy') {
+                    likeIcons[0].classList.remove('text-red-500');
+                    likeIcons[0].classList.remove('fas');
+                    likeIcons[0].classList.add('far');
+
+                    likeIcons[1].classList.remove('text-red-500');
+                    likeIcons[1].classList.remove('fas');
+                    likeIcons[1].classList.add('far');
+
+                    likeOverlayIcons[0].classList.remove('text-red-500');
+                    likeOverlayIcons[0].classList.add('text-white');
+                    likeOverlayIcons[1].classList.remove('text-red-500');
+                    likeOverlayIcons[1].classList.add('text-white');
+                }
+
+                if (dataObj.likes) {
+                    var likesCounts = document.querySelectorAll('#likes-count-' + photoId);
+                    likesCounts[0].innerText = dataObj.likes;
+                    likesCounts[1].innerText = dataObj.likes;
+                }
+            }
+        }
+    }
+</script>
+{% endblock javascript %}
