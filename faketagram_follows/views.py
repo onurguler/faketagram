@@ -74,7 +74,7 @@ def followers_list_view(request, username):
     user = get_object_or_404(User, username=username)
     user_following = None
 
-    if user.is_authenticated:
+    if request.user.is_authenticated:
         user_following = request.user.profile.get_following()
 
     context = {'followers': user.followers.order_by('-created_at'),
@@ -88,7 +88,7 @@ def following_list_view(request, username):
     user = get_object_or_404(User, username=username)
     user_following = None
 
-    if user.is_authenticated:
+    if request.user.is_authenticated:
         user_following = request.user.profile.get_following()
 
     context = {'following': user.following.order_by('-created_at'),
