@@ -1,3 +1,5 @@
 from django.contrib import admin
+from faketagram_follows.models import UserFollow
 
-# Register your models here.
+
+admin.site.register(UserFollow)

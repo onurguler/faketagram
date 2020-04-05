@@ -16,6 +16,7 @@ try:
     from django.core.files.temp import NamedTemporaryFile
     from django.contrib.auth.models import User
     from faketagram_photos.models import Photo, Like, IMAGE_FILTER_CHOICES
+    from faketagram_follows.models import UserFollow
 except ImportError:
     exit(1)
 
@@ -87,6 +88,19 @@ def populate_likes(count=10):
         print('CREATED LIKE:', like)
 
 
+def populate_follows(count=10):
+    for _ in range(int(count)):
+        follower = User.objects.order_by('?').first()
+        followable = User.objects.order_by('?').first()
+
+        if follower != followable:
+            follow, created = UserFollow.objects.get_or_create(
+                follower=follower, followable=followable)
+
+            if created:
+                print('CREATED FOLLOW:', follow)
+
+
 def populate_admin(generate='no'):
     if generate == 'yes':
         user = User(username='admin', is_staff=True, is_superuser=True)
@@ -103,3 +117,5 @@ if __name__ == '__main__':
     populate_photos(input('Photo count: ') or 10)
     print('Recommended like count is 10')
     populate_likes(input('Like count: ') or 10)
+    print('Recommended follow count is 10')
+    populate_follows(input('Follow count: ') or 10)

@@ -27,12 +27,44 @@
                     </div>
                 </div>
             </a>
-            {% if user_following and follow.follower in user_following %}
+            {% comment %} {% if user_following and follow.follower in user_following %}
                 <a href="{% url 'follows:unfollow_user' username=follow.follower.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Unfollow</a>
             {% elif follow.follower != user %}
                 <a href="{% url 'follows:follow_user' username=follow.follower.username %}" class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded">Follow</a>
+            {% endif %} {% endcomment %}
+            {% if user_following and follow.follower in user_following %}
+                <button class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded" data-username="{{ follow.follower.username }}" onclick="followUser(event)">Unfollow</button>
+            {% elif follow.follower != user %}
+                <button class="px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded" data-username="{{ follow.follower.username }}" onclick="followUser(event)">Follow</button>
             {% endif %}
         </div>
     {% endfor %}
 </div>
 {% endblock content %}
+
+{% block javascript %}
+<script>
+    function followUser(e) {
+        var username = e.target.getAttribute('data-username');
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', '/' + username + '/follow', true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send();
+
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                var data = xhr.responseText;
+                var dataObj = JSON.parse(data);
+                console.log(dataObj);
+                if (dataObj.result == 'follow') {
+                    e.target.innerText = "Unfollow";
+                } else if(dataObj.result == 'unfollow') {
+                    e.target.innerText = "Follow";
+                }
+            }
+        }
+    }
+</script>
+{% endblock javascript %}
