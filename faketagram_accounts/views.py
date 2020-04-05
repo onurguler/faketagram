@@ -54,7 +54,7 @@ def login_view(request):
 
         form.add_error(
             'username',
-            'Sorry, your username or password incorrect.' +
+            'Sorry, your username or password incorrect. ' +
             'Please double-check your username and password.')
 
     return render(request, 'accounts/login.html', context={'form': form})

@@ -1,21 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Login to continue</h2>
-<form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-        <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-            <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-            <p style="color: red">{{ error }}</p>
-        {% endfor %}
-        </p>
-    {% endfor %}
-    <button type="submit">Log in</button>
+
+<div class="w-full h-screen flex items-center justify-center">
+
+<form name="loginForm" action="{% url 'accounts:login' %}" method="post" class="max-w-xs w-full mx-auto my-4 border bg-white rounded-lg p-8">
+  {% csrf_token %}
+  {% load form_utils %}
+  <h1 class="mb-2 text-lg text-gray-600 font-bold text-center leading-tight">Log in to continue.</h1>
+  {% for field in form %}
+    <p id="{{ field.name }}">
+      {# <h4 class="mb-2 text-xl font-semibold">{{ field.label_tag }}</h4> #}
+      {{ field | placeholder:field.label | addclass:'mt-2 px-2 py-1 bg-gray-100 border rounded w-full focus:outline-none focus:shadow-outline'}}
+      {% for error in field.errors %}
+        <p class="text-red-600 text-sm form-error">{{ error }}</p>
+        <script type="text/javascript">
+          document.loginForm.{{field.name}}.classList.remove('border')
+          document.loginForm.{{field.name}}.classList.add('border-red-500', 'border-2');
+        </script>
+      {% endfor %}
+      {% if field.help_text %}
+        <small class="text-gray-600">{{ field.help_text }}</small>
+      {% endif %}
+    </p>
+  {% endfor %}
+  <button type="submit" class="mt-4 py-1 w-full bg-blue-500 text-white font-bold text-center rounded focus:outline-none focus:shadow-outline">Log in</button>
+  <p class="mt-4 text-xs text-center text-gray-600 leading-tight" style="color: grey">
+    <a href="#" class="text-blue-700 font-semibold hover:text-blue-800 cursor-pointer">Forgot password?</a>
+  </p>
 </form>
+</div>
 {% endblock content %}
