@@ -4,7 +4,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from faketagram_accounts.forms import SignUpForm, LoginForm
+from faketagram_accounts.forms import SignUpForm, LoginForm, UserEditForm
+from faketagram_profiles.forms import ProfileEditForm
 
 
 def signup_view(request):
@@ -69,7 +70,7 @@ def logout_view(request):
 
 def search_accounts_view(request):
     if request.POST:
-        # TODO: dynamic search accounts
+        # @TODO: dynamic search accounts
         pass
 
     accounts = User.objects.all()
@@ -77,3 +78,18 @@ def search_accounts_view(request):
     context = {'accounts': accounts}
 
     return render(request, 'accounts/search.html', context)
+
+
+@login_required
+def edit_view(request):
+    user_form = UserEditForm(request.POST or None, instance=request.user)
+    profile_form = ProfileEditForm(
+        request.POST or None, request.FILES or None, instance=request.user.profile)
+
+    if user_form.is_valid() and profile_form.is_valid():
+        user_form.save()
+        profile_form.save()
+
+    context = {'user_form': user_form, 'profile_form': profile_form}
+
+    return render(request, 'accounts/edit.html', context)

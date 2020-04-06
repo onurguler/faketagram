@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% load form_utils %}
+
+{% block header %}
+<div class="bg-white border-b sticky top-0 w-full z-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-1 flex items-center justify-between">
+        <a href="{% url 'profiles:profile_detail' username=user.username %}" class="text-2xl text-gray-600 hover:text-gray-900">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <p class="font-semibold">Edit Profile</p>
+        <p></p>
+    </div>
+</div>
+{% endblock header %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto md:px-8 lg:px-10 py-10">
+    <div class="px-4 sm:px-8 py-6 border rounded">
+        <form action="{% url 'accounts:edit' %}" method="POST">
+            {% csrf_token %}
+            {% if user_form.errors %}
+                {% for field in user_form %}
+                    {% for error in field.errors %}
+                        <div class="mb-4 text-red-500 text-center">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="mb-4 text-red-500 text-red-500">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% if profile_form.errors %}
+                {% for field in profile_form %}
+                    {% for error in field.errors %}
+                        <div class="mb-4 text-red-500 text-red-500">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="mb-4 text-red-500 text-red-500">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div>
+                <div class="flex items-center">
+                    <div class="mr-8 sm:w-36 sm:text-right">
+                        <label for="id_photo">
+                            <img class="float-right w-10 h-10 rounded-full border object-center object-cover" src="{{ user.profile.photo.url }}" alt="">
+                        </label>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-semibold leading-tight">{{ user.username }}</h2>
+                        <label for="id_photo" class="text-sm text-blue-500 leading-tight font-bold hover:text-blue-600 focus:outline-none">Change Profile Photo</a>
+                    </div>
+                </div>
+                <input class="hidden" type="file" name="photo" accept="image/*" id="id_photo">
+            </div>
+            <div class="mt-4 sm:flex sm:items-center">
+                <label class="mr-8 mb-2 sm:mb-0 sm:w-36 sm:text-right block sm:inline font-bold" for="id_full_name">Name</label>
+                {{ profile_form.full_name | addclass:'border px-2 py-1 rounded max-w-sm w-full' }}
+            </div>
+            <div class="mt-4 sm:flex sm:items-center">
+                <label class="mr-8 mb-2 sm:mb-0 sm:w-36 sm:text-right block sm:inline font-bold" for="id_username">Username</label>
+                {{ user_form.username | addclass:'border px-2 py-1 rounded max-w-sm w-full' }}
+            </div>
+            <div class="mt-4 sm:flex sm:items-start">
+                <label class="mr-8 mb-2 sm:mb-0 sm:w-36 sm:text-right block sm:inline font-bold" for="id_bio">Bio</label>
+                {{ profile_form.bio | addclass:'border px-2 py-1 rounded max-w-sm w-full' }}
+            </div>
+            <div class="mt-4 sm:flex sm:items-start">
+                <span class="mr-8 mb-2 sm:mb-0 sm:w-36 sm:text-right block sm:inline font-bold"></span>
+                <div class="max-w-sm w-full">
+                    <h4 class="text-sm font-bold text-gray-600">Personal Information</h4>
+                    <p class="text-xs text-gray-600 leading-tight">Provide your personal information, even if the account is used for a business, a pet or something else. This won't be a part of your public profile.</p>
+                </div>
+            </div>
+            <div class="mt-4 sm:flex sm:items-start">
+                <label class="mr-8 mb-2 sm:mb-0 sm:w-36 sm:text-right block sm:inline font-bold" for="id_email">Email</label>
+                {{ user_form.email | addclass:'border px-2 py-1 rounded max-w-sm w-full' }}
+            </div>
+            <div class="mt-4 sm:flex sm:items-start">
+                <span class="mr-8 mb-2 sm:mb-0 sm:w-36 sm:text-right block sm:inline font-bold"></span>
+                <input type="submit" value="Submit" class="px-2 py-1 font-bold bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer focus:outline-none">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
