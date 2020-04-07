@@ -8,6 +8,12 @@
                 <div>
                     <p><span class="font-bold">{{ notification.content_object.follower.username }}</span> started follow you.</p>
                 </div>
+            {% elif notification.notification_type == 'PL' %}
+                <img class="mr-4 w-10 h-10 object-center object-cover border rounded-full" src="{{ notification.content_object.photo_like.user.profile.photo.url }}" alt="">
+                <div>
+                    <p><span class="font-bold">{{ notification.content_object.photo_like.user.username }}</span> liked your post.</p>
+                </div>
+                <img class="mr-4 w-10 h-10 object-center object-cover" src="{{ notification.content_object.photo_like.photo.image.url }}" alt="">
             {% endif %}
         </div>
     {% endfor %}

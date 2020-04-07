@@ -51,7 +51,7 @@ class Photo(TimeStampedModel):
         return f'{self.user.username} - {self.created_at}'
 
 
-class Like(TimeStampedModel):
+class PhotoLike(TimeStampedModel):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='likes')
     photo = models.ForeignKey(

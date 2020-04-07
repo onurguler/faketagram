@@ -15,7 +15,7 @@ try:
     from django.core.files import File
     from django.core.files.temp import NamedTemporaryFile
     from django.contrib.auth.models import User
-    from faketagram_photos.models import Photo, Like, IMAGE_FILTER_CHOICES
+    from faketagram_photos.models import Photo, PhotoLike, IMAGE_FILTER_CHOICES
     from faketagram_follows.models import UserFollow
 except ImportError:
     exit(1)
@@ -55,7 +55,7 @@ def populate_users(count=10):
 
         print('CREATED USER:', user)
 
-        time.sleep(1)
+        # time.sleep(1)
 
 
 def populate_photos(count=10):
@@ -75,7 +75,7 @@ def populate_photos(count=10):
 
         print('CREATED PHOTO:', photo)
 
-        time.sleep(1)
+        # time.sleep(1)
 
 
 def populate_likes(count=10):
@@ -83,7 +83,7 @@ def populate_likes(count=10):
         user = User.objects.order_by('?').first()
         photo = Photo.objects.order_by('?').first()
 
-        like = Like.objects.get_or_create(user=user, photo=photo)[0]
+        like = PhotoLike.objects.get_or_create(user=user, photo=photo)[0]
 
         print('CREATED LIKE:', like)
 

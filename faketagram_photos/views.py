@@ -7,7 +7,8 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 
 from faketagram_photos.forms import PhotoAddForm, PhotoCreateStyleForm, PhotoCreateDetailForm
-from faketagram_photos.models import Photo, Like
+from faketagram_photos.models import Photo, PhotoLike
+from faketagram_notifications.models import Notification, PhotoLikeNotification
 
 
 @login_required
@@ -111,8 +112,14 @@ def like_view(request, photo_id):
     like_qs = photo.likes.filter(user=request.user)
 
     if not like_qs.exists():
-        Like.objects.create(user=request.user, photo=photo)
+        photo_like = PhotoLike.objects.create(user=request.user, photo=photo)
         result = "create"
+
+        # Send notification to user
+        photo_like_notification = PhotoLikeNotification.objects.create(
+            photo_like=photo_like)
+        Notification.objects.create(notification_type=Notification.PHOTO_LIKE,
+                                    notifiable=photo.user, content_object=photo_like_notification)
     else:
         like = like_qs[0]
         like.delete()
