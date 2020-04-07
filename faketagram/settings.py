@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'faketagram_follows',
     'faketagram_core',
     'faketagram_photos',
+    'faketagram_notifications',
 ]
 
 MIDDLEWARE = [

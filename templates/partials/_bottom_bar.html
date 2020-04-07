@@ -14,7 +14,7 @@
                 </label>
                 <input class="hidden" type="file" id="id_image" name="image" accept="image/*" required>
             </form>
-            <a href="#" class="w-1/5 text-center text-gray-600 hover:text-gray-900 text-2xl">
+            <a href="{% url 'notifications:notification_list' %}" class="w-1/5 text-center text-gray-600 hover:text-gray-900 text-2xl">
                 <i class="far fa-heart"></i>
             </a>
             <a href="{% url 'profiles:profile_detail' username=user.username %}" class="w-1/5 text-center">

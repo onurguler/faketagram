@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('faketagram_core.urls', namespace='core')),
     path('admin/', admin.site.urls),
+    path('notifications/', include('faketagram_notifications.urls',
+                                   namespace='notifications')),
     path('accounts/', include('faketagram_accounts.urls', namespace='accounts')),
     path('photos/', include('faketagram_photos.urls', namespace='photos')),
     path('', include('faketagram_profiles.urls', namespace='profiles')),
