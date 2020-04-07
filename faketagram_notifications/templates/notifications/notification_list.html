@@ -1,4 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-Notification List
+<div>
+    {% for notification in notifications %}
+        <div class="flex items-center">
+            {% if notification.notification_type == 'F' %}
+                <img class="mr-4 w-10 h-10 object-center object-cover border rounded-full" src="{{ notification.content_object.follower.profile.photo.url }}" alt="">
+                <div>
+                    <p><span class="font-bold">{{ notification.content_object.follower.username }}</span> started follow you.</p>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
 {% endblock content %}

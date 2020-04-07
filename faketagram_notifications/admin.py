@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from faketagram_notifications.models import Notification, FollowNotification
+
+
+admin.site.register(Notification)
+admin.site.register(FollowNotification)

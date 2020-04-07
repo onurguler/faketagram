@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 
 from faketagram_follows.models import UserFollow
+from faketagram_notifications.models import Notification, FollowNotification
 
 
 @login_required
@@ -19,6 +20,14 @@ def handle_ajax_follow(request, username):
     if not user_follow_qs.exists():
         UserFollow.objects.create(follower=request.user, followable=followable)
         result = "follow"
+
+        # Send notification to followable
+        follow_notification = FollowNotification.objects.create(
+            follower=request.user)
+        Notification.objects.create(
+            notification_type=Notification.FOLLOW,
+            notifiable=followable,
+            content_object=follow_notification)
     else:
         user_follow = user_follow_qs[0]
         user_follow.delete()
@@ -45,6 +54,12 @@ def follow_view(request, username):
         if created:
             messages.success(
                 request, f'You have successfully followed {followable.username}.')
+
+            # Send notification to followable
+            follow_notification = FollowNotification.objects.create(
+                follower=request.user)
+            Notification.objects.create(
+                user=request.user, notifiable=followable, content_object=follow_notification)
         else:
             messages.warning(
                 request, f'You have already followed {followable.username}.')

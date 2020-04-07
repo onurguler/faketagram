@@ -6,4 +6,6 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def notification_list_view(request):
-    return render(request, 'notifications/notification_list.html')
+    notifications = request.user.notifications.order_by('-updated_at')
+    context = {'notifications': notifications}
+    return render(request, 'notifications/notification_list.html', context)
