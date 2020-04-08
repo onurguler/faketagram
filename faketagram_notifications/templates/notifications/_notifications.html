@@ -1,0 +1,7 @@
+{% for notification in notifications %}
+    {% if notification.notification_type == 'F' %}
+        {% include 'notifications/_follow_notification.html' %}
+    {% elif notification.notification_type == 'PL' %}
+        {% include 'notifications/_photo_like_notification.html' %}
+    {% endif %}
+{% endfor %}

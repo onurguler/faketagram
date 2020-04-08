@@ -11,14 +11,8 @@
 {% endblock header %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10">
-    {% for notification in notifications %}
-        {% if notification.notification_type == 'F' %}
-            {% include 'notifications/_follow_notification.html' %}
-        {% elif notification.notification_type == 'PL' %}
-            {% include 'notifications/_photo_like_notification.html' %}
-        {% endif %}
-    {% endfor %}
+<div class="notification-container max-w-5xl mx-auto px-4 sm:px-8 lg:px-10">
+    {% include 'notifications/_notifications.html' %}
 </div>
 {% endblock content %}
 
