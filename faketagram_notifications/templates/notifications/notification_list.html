@@ -1,21 +1,50 @@
 {% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block header %}
+<div class="bg-white border-b sticky top-0 w-full z-10">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 py-2 text-center">
+        <h2 class="font-bold leading-7">Activity</h2>
+    </div>
+</div>
+{% endblock header %}
+
 {% block content %}
-<div>
+<div class="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10">
     {% for notification in notifications %}
-        <div class="flex items-center">
-            {% if notification.notification_type == 'F' %}
-                <img class="mr-4 w-10 h-10 object-center object-cover border rounded-full" src="{{ notification.content_object.follower.profile.photo.url }}" alt="">
-                <div>
-                    <p><span class="font-bold">{{ notification.content_object.follower.username }}</span> started follow you.</p>
-                </div>
-            {% elif notification.notification_type == 'PL' %}
-                <img class="mr-4 w-10 h-10 object-center object-cover border rounded-full" src="{{ notification.content_object.photo_like.user.profile.photo.url }}" alt="">
-                <div>
-                    <p><span class="font-bold">{{ notification.content_object.photo_like.user.username }}</span> liked your post.</p>
-                </div>
-                <img class="mr-4 w-10 h-10 object-center object-cover" src="{{ notification.content_object.photo_like.photo.image.url }}" alt="">
-            {% endif %}
-        </div>
+        {% if notification.notification_type == 'F' %}
+            {% include 'notifications/_follow_notification.html' %}
+        {% elif notification.notification_type == 'PL' %}
+            {% include 'notifications/_photo_like_notification.html' %}
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock content %}
+
+{% block javascript %}
+<script>
+    function followUser(e) {
+        var username = e.target.getAttribute('data-username');
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', '/' + username + '/follow', true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send();
+
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                var data = xhr.responseText;
+                var dataObj = JSON.parse(data);
+                console.log(dataObj);
+                if (dataObj.result == 'follow') {
+                    e.target.innerText = "Unfollow";
+                } else if(dataObj.result == 'unfollow') {
+                    e.target.innerText = "Follow";
+                }
+            }
+        }
+    }
+</script>
+{% endblock javascript %}

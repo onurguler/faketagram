@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 
 from faketagram_follows.models import UserFollow
-from faketagram_notifications.models import Notification, FollowNotification
+from faketagram_notifications.models import Notification, UserFollowNotification
 
 
 @login_required
@@ -18,12 +18,13 @@ def handle_ajax_follow(request, username):
     user_follow_qs = request.user.following.filter(followable=followable)
 
     if not user_follow_qs.exists():
-        UserFollow.objects.create(follower=request.user, followable=followable)
+        user_follow = UserFollow.objects.create(
+            follower=request.user, followable=followable)
         result = "follow"
 
         # Send notification to followable
-        follow_notification = FollowNotification.objects.create(
-            follower=request.user)
+        follow_notification = UserFollowNotification.objects.create(
+            user_follow=user_follow)
         Notification.objects.create(
             notification_type=Notification.FOLLOW,
             notifiable=followable,
@@ -48,7 +49,7 @@ def follow_view(request, username):
     followable = get_object_or_404(User, username=username)
 
     if followable != request.user:
-        _, created = UserFollow.objects.get_or_create(
+        user_follow, created = UserFollow.objects.get_or_create(
             follower=request.user, followable=followable)
 
         if created:
@@ -56,10 +57,12 @@ def follow_view(request, username):
                 request, f'You have successfully followed {followable.username}.')
 
             # Send notification to followable
-            follow_notification = FollowNotification.objects.create(
-                follower=request.user)
+            follow_notification = UserFollowNotification.objects.create(
+                user_follow=user_follow)
             Notification.objects.create(
-                user=request.user, notifiable=followable, content_object=follow_notification)
+                notification_type=Notification.FOLLOW,
+                notifiable=followable,
+                content_object=follow_notification)
         else:
             messages.warning(
                 request, f'You have already followed {followable.username}.')

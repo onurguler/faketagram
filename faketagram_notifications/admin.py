@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from faketagram_notifications.models import Notification, FollowNotification, PhotoLikeNotification
+from faketagram_notifications.models import Notification, UserFollowNotification, PhotoLikeNotification
 
 
 admin.site.register(Notification)
-admin.site.register(FollowNotification)
+admin.site.register(UserFollowNotification)
 admin.site.register(PhotoLikeNotification)

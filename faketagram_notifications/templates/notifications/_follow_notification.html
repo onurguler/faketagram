@@ -1,0 +1,19 @@
+{% load humanize %}
+
+<div class="flex items-center text-sm">
+    <img class="mr-2 w-10 h-10 object-center object-cover border rounded-full" src="{{ notification.content_object.user_follow.follower.profile.photo.url }}" alt="">
+    <div class="flex items-center justify-between py-3 border-b w-full">
+        <a href="{% url 'profiles:profile_detail' username=notification.content_object.user_follow.follower.username %}">
+            <div class="w-full">
+                <p><span class="font-bold">{{ notification.content_object.user_follow.follower.username }}</span></p>
+                <p>started following you. <span class="text-gray-500">{{ notification.updated_at | naturaltime }}</span></p>
+            </div>
+        </a>
+        {% if notification.content_object.user_follow.follower in user_following %}
+            <button class="z-10 px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded" data-username="{{ notification.content_object.user_follow.follower.username }}" onclick="followUser(event)">Unfollow</button>
+        {% elif follow.follower != user %}
+            <button class="z-10 px-3 py-1 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none rounded" data-username="{{ notification.content_object.user_follow.follower.username }}" onclick="followUser(event)">Follow</button>
+        {% endif %}
+    </div>
+</div>
+

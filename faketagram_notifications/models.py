@@ -2,9 +2,10 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from faketagram_photos.models import PhotoLike
 
 from faketagram.models import TimeStampedModel
+from faketagram_photos.models import PhotoLike
+from faketagram_follows.models import UserFollow
 
 
 class Notification(TimeStampedModel):
@@ -32,13 +33,13 @@ class Notification(TimeStampedModel):
         return f'{self.notifiable.username} - {self.created_at}'
 
 
-class FollowNotification(TimeStampedModel):
+class UserFollowNotification(TimeStampedModel):
     notification = GenericRelation(
         Notification, related_name='follow_notifications')
-    follower = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_follow = models.ForeignKey(UserFollow, on_delete=models.CASCADE)
 
     def __str__(self):
-        return u'%s started follow to .' % self.follower.username
+        return f'{self.user_follow.follower} started following {self.user_follow.followable}'
 
 
 class PhotoLikeNotification(TimeStampedModel):

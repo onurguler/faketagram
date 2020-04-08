@@ -1,0 +1,16 @@
+{% load humanize %}
+
+<a href="{% url 'photos:photo_detail' pk=notification.content_object.photo_like.photo.pk %}">
+    <div class="flex items-center text-sm">
+        <img class="mr-2 w-10 h-10 object-center object-cover border rounded-full" src="{{ notification.content_object.photo_like.user.profile.photo.url }}" alt="">
+        <div class="flex items-center justify-between py-3 border-b w-full">
+            <div>
+                <p><span class="font-bold">{{ notification.content_object.photo_like.user.username }}</span></p>
+                <p>liked your post. <span class="text-gray-500">{{ notification.updated_at | naturaltime }}</span></p>
+            </div>
+            <figure class="ml-2 w-10 h-10 {{ notification.content_object.photo_like.photo.image_filter }}">
+                <img class="w-10 h-10 object-center object-cover" src="{{ notification.content_object.photo_like.photo.image.url }}" alt="">
+            </figure>
+        </div>
+    </div>
+</a>
